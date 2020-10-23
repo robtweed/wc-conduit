@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-root';
+  const componentName = 'conduit-root';
 
   customElements.define(componentName, class conduit_root extends HTMLElement {
     constructor() {
@@ -97,15 +97,14 @@ export function load() {
       let noOfArticles = articlesArr.length;
 
       if (noOfArticles === 0) {
-        let el = document.createElement('div');
+        const el = document.createElement('div');
         el.textContent = 'No articles are here... yet.';
         el.className = 'article-preview';
         parentDiv.appendChild(el);
         return;
       }
 
-      let _this = this;
-      async function addNextArticle(no) {
+      const addNextArticle = async (no) => {
         if (no > noOfArticles) return;
 
         let articleObj = articlesArr[no - 1];
@@ -121,12 +120,12 @@ export function load() {
             favorited: articleObj.favorited,
             image: articleObj.image,
             tags: articleObj.tags,
-            home_page: _this.home_page,
-            root: _this
+            home_page: this.home_page,
+            root: this
           }
         };
 
-        await _this.loadAssembly(assembly, parentDiv, _this.context);
+        await this.loadAssembly(assembly, parentDiv, this.context);
         addNextArticle(no + 1);
       }
       addNextArticle(1);
@@ -134,7 +133,7 @@ export function load() {
 
     normaliseArticles(results) {
       let articlesArr = [];
-      results.articles.forEach(function(article) {
+      results.articles.forEach((article) => {
         articlesArr.push({
           slug: article.slug,
           author: article.author.username,
@@ -156,7 +155,7 @@ export function load() {
 
     removeArticles(parentDiv) {
       let articles = [...parentDiv.getElementsByTagName('conduit-article-preview')];
-      articles.forEach(function(article_component) {
+      articles.forEach((article_component) => {
         article_component.remove();
       });
     }
@@ -166,38 +165,32 @@ export function load() {
       if (articlesCount > limit) {
         let noOfLinks = Math.floor(articlesCount / limit);
         if ((articlesCount % limit) > 0) noOfLinks++;
-        let _this = this;
 
-        async function addNextLink(no) {
+        const addNextLink = async (no) => {
           if (no > noOfLinks) return;
 
           let assembly = {
             componentName: 'conduit-pagination-link',
             state: {
               no: no,
-              ownerPage: _this,
+              ownerPage: this,
               limit: limit,
               classification: classification
             }
           };
-          await _this.loadAssembly(assembly, parentDiv, _this.context);
+          await this.loadAssembly(assembly, parentDiv, this.context);
           addNextLink(no + 1);
-
         }
-
         addNextLink(1);
-
       }
     }
 
     removePagination(parentDiv) {
       let links = [...parentDiv.getElementsByTagName('conduit-pagination-link')];
-      links.forEach(function(link_component) {
+      links.forEach((link_component) => {
         link_component.remove();
       });
     }
-
-    // end of helper methods
 
     getContentPage(pageName) {
       let children = [...this.contentTarget.childNodes];
@@ -305,68 +298,51 @@ export function load() {
       this.loadCSSFile('//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic');
       this.loadCSSFile('//demo.productionready.io/main.css');
 
-      let _this = this;
-
-      let noOfFiles = 4;
-      let count = 0;
-      this.loadJSFile(prefix + 'js/jquery/jquery.min.js', function() {
-        _this.loadJSFile(prefix + 'js/auth0/jwt-decode.min.js', function() {
-          count++;
-          if (count === noOfFiles) _this.isReady();
-        });
-        _this.loadJSFile(prefix + 'js/bootstrap/bootstrap.bundle.min.js', function() {
-          count++;
-          if (count === noOfFiles) _this.isReady();
-        });
-        _this.loadJSFile(prefix + 'js/jquery-easing/jquery.easing.min.js', function() {
-          count++;
-          if (count === noOfFiles) _this.isReady();
-        });
-        _this.loadJSFile(prefix + 'js/showdown/showdown.min.js', function() {
-          count++;
-          if (count === noOfFiles) _this.isReady();
-        });
+      this.loadJSFile(prefix + 'js/auth0/jwt-decode.min.js', () => {
+        // trigger ready event - home page can now safely render
+        this.isReady();
       });
+      this.loadJSFile(prefix + 'js/showdown/showdown.min.js');
 
       // add home link handler
 
-      let fn = function() {
-        _this.switchToPage('home_page');
+      const fn = () => {
+        this.switchToPage('home_page');
       };
       this.addHandler(fn, this.homeLink);
       this.addHandler(fn, this.headerTitle);
 
       // Sign In link in top right
 
-      let fn2 = function() {
-        _this.switchToPage('login');
+      const fn2 = () => {
+        this.switchToPage('login');
       };
       this.addHandler(fn2, this.signInLink);
 
       // Sign Up link in top right
 
-      let fn3 = function() {
-        _this.switchToPage('signup');
+      const fn3 = () => {
+        this.switchToPage('signup');
       };
       this.addHandler(fn3, this.signUpLink);
 
       // New Post link in top-right
 
-      let fn4 = function() {
-        _this.switchToPage('new_article');
+      const fn4 = () => {
+        this.switchToPage('new_article');
       };
       this.addHandler(fn4, this.newPostLink);
 
       // Settings link in top-right
 
-      let fn5 = function() {
-        _this.switchToPage('settings');
+      const fn5 = () => {
+        this.switchToPage('settings');
       };
       this.addHandler(fn5, this.settingsLink);
 
-      let fn6 = function() {
-        _this.context.author = _this.context.user.username;
-        _this.switchToPage('profile');
+      const fn6 = () => {
+        this.context.author = this.context.user.username;
+        this.switchToPage('profile');
       };
       this.addHandler(fn6, this.userLink);
 

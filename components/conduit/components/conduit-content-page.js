@@ -24,14 +24,14 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
   let counter = -1;
-  let componentName = 'conduit-content-page';
+  const componentName = 'conduit-content-page';
   let id_prefix = componentName + '-';
 
   customElements.define(componentName, class content_page extends HTMLElement {
@@ -49,7 +49,7 @@ export function load() {
 
     onLoaded() {
       //console.log(this.name + ' page loaded!');
-      let root = document.getElementsByTagName('conduit-root')[0];
+      const root = document.getElementsByTagName('conduit-root')[0];
       root.setPageActive(this.name);
     }
 
@@ -59,7 +59,7 @@ export function load() {
       }
       if (state.show && !this.rootElement.classList.contains('show')) {
         let children = [...this.parentNode.childNodes];
-        children.forEach(function(child) {
+        children.forEach((child) => {
           if (child.tagName === 'CONDUIT-CONTENT-PAGE') {
             child.rootElement.classList.remove('show');
           }
@@ -69,8 +69,6 @@ export function load() {
     }
 
     onSelected() {
-      //console.log('conduit-content-page onSelected fired');
-      //console.log(this.childComponent);
       if (this.childComponent && this.childComponent.onSelected) {
         this.childComponent.onSelected();
       }

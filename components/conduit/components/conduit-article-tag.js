@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-article-tag';
+  const componentName = 'conduit-article-tag';
 
   customElements.define(componentName, class conduit_article_tag extends HTMLElement {
     constructor() {
@@ -61,7 +61,7 @@ export function load() {
     }
 
     disconnectedCallback() {
-      //console.log('*** article tag component was removed!');
+      //console.log('*** tag component was removed!');
       if (this.onUnload) this.onUnload();
     }
   });

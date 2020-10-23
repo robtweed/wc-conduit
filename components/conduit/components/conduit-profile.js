@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-profile';
+  const componentName = 'conduit-profile';
 
   customElements.define(componentName, class conduit_profile extends HTMLElement {
     constructor() {
@@ -214,8 +214,6 @@ export function load() {
     getAndDisplayArticles(offset, classification) {
       // triggered by pagination link
 
-      //console.log('*** classification: ' + classification);
-      //console.log('offset = ' + offset);
       if (classification === 'my-articles') {
         this.root.removeArticles(this.myArticlesPreview);
         this.fetchMyArticles(offset)
@@ -261,30 +259,30 @@ export function load() {
     }
 
     onLoaded() {
-      let _this = this;
+
       this.defaultImgSrc = this.context.defaultImage || '';
 
       // Follow button
 
-      let fn = async function() {
-        //console.log('request to follow ' + _this.profile.username);
-        if (!_this.loggedIn) {
-          _this.context.return_to = 'profile';
-          _this.root.switchToPage('login');
+      const fn = async () => {
+        //console.log('request to follow ' + this.profile.username);
+        if (!this.loggedIn) {
+          this.context.return_to = 'profile';
+          this.root.switchToPage('login');
         }
         else {
-          if (_this.profile.following === false) {
-            let results = await _this.root.apis.follow(_this.profile.username);
+          if (this.profile.following === false) {
+            let results = await this.root.apis.follow(this.profile.username);
             if (!results.error) {
-              _this.profile = results.profile;
-              _this.setState(results.profile);
+              this.profile = results.profile;
+              this.setState(results.profile);
             }
           }
           else {
-            let results = await _this.root.apis.unfollow(_this.profile.username);
+            let results = await this.root.apis.unfollow(this.profile.username);
             if (!results.error) {
-              _this.profile = results.profile;
-              _this.setState(results.profile);
+              this.profile = results.profile;
+              this.setState(results.profile);
             }
           }
         }
@@ -293,15 +291,15 @@ export function load() {
 
       // My Articles header link
 
-      let fn2 = function() {
-        _this.showMyArticles();
+      const fn2 = () => {
+        this.showMyArticles();
       };
       this.addHandler(fn2, this.myArticlesLink);
 
       // Favorited Articles link
 
-      let fn3 = function() {
-        _this.showFavouritedArticles();
+      const fn3 = () => {
+        this.showFavouritedArticles();
       };
       this.addHandler(fn3, this.favouritedArticlesLink);
     }

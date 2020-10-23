@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-new-article-tag';
+  const componentName = 'conduit-new-article-tag';
 
   customElements.define(componentName, class conduit_new_article_tag extends HTMLElement {
     constructor() {
@@ -62,21 +62,19 @@ export function load() {
 
     onLoaded() {
 
-      let _this = this;
-
       // add delete tag handler to x within tag
 
-      let fn = function() {
+      const fn = () => {
         // remove tag from parent's array of tags
 
-        let index = _this.new_article.tagList.indexOf(_this.text);
+        let index = this.new_article.tagList.indexOf(this.text);
         if (index > -1) {
-           _this.new_article.tagList.splice(index, 1);
+          this.new_article.tagList.splice(index, 1);
         }
 
         // remove this tag component from the display
 
-        _this.remove();
+        this.remove();
       };
       this.addHandler(fn, this.x);
 

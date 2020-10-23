@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-tag';
+  const componentName = 'conduit-tag';
 
   customElements.define(componentName, class conduit_tag extends HTMLElement {
     constructor() {
@@ -53,11 +53,11 @@ export function load() {
       if (state.text) {
         this.rootElement.textContent = state.text;
         this.tag = state.text;
-        let _this = this;
-        let fn = function() {
+
+        const fn = () => {
           //fetch first batch of articles for selected tag
           // clear down any articles under the preview header tag first
-          _this.home_page.showByTagArticles(state.text, 0, true);
+          this.home_page.showByTagArticles(state.text, 0, true);
         };
         this.addHandler(fn, this.rootElement);
       }

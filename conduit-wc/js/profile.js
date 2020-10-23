@@ -24,13 +24,13 @@
  |  limitations under the License.                                                  |
  ------------------------------------------------------------------------------------
 
-  21 October 2020
+  5 October 2020
 
 */
 
 export function profile_assembly() {
 
-  let component = {
+  const component = {
     componentName: 'conduit-content-page',
     state: {
       name: 'profile'
@@ -43,11 +43,11 @@ export function profile_assembly() {
     ]
   };
   
-  let hooks = {
+  const hooks = {
     'conduit-profile': {
       initialise: function() {
-        let context = this.context;
-        let contentPage = this.getParentComponent('conduit-content-page');
+        const context = this.context;
+        const contentPage = this.getParentComponent('conduit-content-page');
         contentPage.childComponent = this;
 
         this.setState({

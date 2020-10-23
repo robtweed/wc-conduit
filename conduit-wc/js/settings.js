@@ -24,13 +24,13 @@
  |  limitations under the License.                                                  |
  ------------------------------------------------------------------------------------
 
-  21 October 2020
+  23 October 2020
 
 */
 
 export function settings_assembly() {
 
-  let component = {
+  const component = {
     componentName: 'conduit-content-page',
     state: {
       name: 'settings'
@@ -43,7 +43,7 @@ export function settings_assembly() {
     ]
   };
 
-  let hooks = {
+  const hooks = {
     'conduit-settings': {
       initialise: function() {
         let context = this.context;

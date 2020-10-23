@@ -24,13 +24,13 @@
  |  limitations under the License.                                                  |
  ------------------------------------------------------------------------------------
 
-  21 October 2020
+  5 October 2020
 
 */
 
 export function article_assembly() {
 
-  let component = {
+  const component = {
     componentName: 'conduit-content-page',
     state: {
       name: 'article'
@@ -38,17 +38,17 @@ export function article_assembly() {
     children: [
       {
         componentName: 'conduit-article',
-        hooks: ['getArticle']
+        hooks: ['initialise']
       }
     ]
   };
 
-  let hooks = {
+  const hooks = {
     'conduit-article': {
-      getArticle: function() {
+      initialise: function() {
 
-        let context = this.context;
-        let contentPage = this.getParentComponent('conduit-content-page');
+        const context = this.context;
+        const contentPage = this.getParentComponent('conduit-content-page');
         contentPage.childComponent = this;
         this.setState({
           root: this.context.root

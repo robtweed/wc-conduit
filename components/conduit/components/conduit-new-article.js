@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-new-article';
+  const componentName = 'conduit-new-article';
 
   customElements.define(componentName, class conduit_new_article extends HTMLElement {
     constructor() {
@@ -83,10 +83,9 @@ export function load() {
 
     addErrors(errors) {
       let type;
-      let _this = this;
       for (type in errors) {
-        errors[type].forEach(function(error) {
-          _this.addError(type + ' ' + error);
+        errors[type].forEach((error) => {
+          this.addError(type + ' ' + error);
         });
       }
     }
@@ -104,14 +103,13 @@ export function load() {
     }
 
     addTags(tags) {
-      let noOfTags = tags.length;
-      let _this = this;
+      const noOfTags = tags.length;
 
-      async function addTag(no) {
+      const addTag = async (no) => {
         if (no > (noOfTags -1)) {
           return;
         }
-        await _this.addTag(tags[no]);
+        await this.addTag(tags[no]);
         addTag(no + 1);
       }
 
@@ -132,7 +130,7 @@ export function load() {
 
     removeTags() {
       let tags = [...this.tagListEl.getElementsByTagName('conduit-new-article-tag')];
-      tags.forEach(function(tag_component) {
+      tags.forEach((tag_component) => {
         tag_component.remove();
       });
     }
@@ -168,53 +166,54 @@ export function load() {
 
     onLoaded() {
 
-      let _this = this;
       this.tagList = [];
 
       // tag list input handler
 
-      let fn1 = async function() {
+      const fn1 = async () => {
 
-        if (_this.tagList.indexOf(this.value) !== -1) {
-          //console.log('tag already specified');
-          this.value = '';
+        const value = this.article.tagList.value;
+
+        if (this.tagList.indexOf(value) !== -1) {
+          // already added this tag, so ignore and clear the field
+          this.article.tagList.value = '';
           return;
         }
 
-        _this.tagList.push(this.value);
-        _this.addTag(this.value);
-        this.value = '';
+        // create a new tag icon
+        this.tagList.push(value);
+        this.addTag(value);
+        // clear the input for the next tag being specified
+        this.article.tagList.value = '';
 
       };
       this.addHandler(fn1, this.article.tagList, 'change');
 
       // form submission handler
 
-      let fn2 = async function(e) {
+      const fn2 = async (e) => {
         e.preventDefault();
-        let article = _this.article;
-        //console.log('tagList:');
-        //console.log(_this.tagList);
+        let article = this.article;
         let results;
 
-        if (_this.context.editing_article) {
-          //console.log('submit updated article');
-          let slug = _this.context.editing_article.slug;
-          results = await _this.root.apis.updateArticle(slug, article.title.value, article.description.value, article.body.value, _this.tagList);
+        if (this.context.editing_article) {
+          // submitting edits to an existing article
+          let slug = this.context.editing_article.slug;
+          results = await this.root.apis.updateArticle(slug, article.title.value, article.description.value, article.body.value, this.tagList);
         }
         else {
-          //console.log('submit new article');
-          results = await _this.root.apis.createArticle(article.title.value, article.description.value, article.body.value, _this.tagList);
+          // submitting a new article
+          results = await this.root.apis.createArticle(article.title.value, article.description.value, article.body.value, this.tagList);
         }
         if (!results.errors) {
-          _this.context.editing_article = false;
-          _this.context.refresh_home_page = true;
-          _this.context.slug = results.article.slug;
-          _this.root.switchToPage('article');
+          this.context.editing_article = false;
+          this.context.refresh_home_page = true;
+          this.context.slug = results.article.slug;
+          this.root.switchToPage('article');
         }
         else {
-          _this.clearErrors();
-          _this.addErrors(results.errors);
+          this.clearErrors();
+          this.addErrors(results.errors);
         }
 
       };

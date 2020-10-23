@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-article';
+  const componentName = 'conduit-article';
 
   customElements.define(componentName, class conduit_article extends HTMLElement {
     constructor() {
@@ -199,10 +199,9 @@ export function load() {
     }
 
     addTags(tags) {
-      let noOfTags = tags.length;
-      let _this = this;
+      const noOfTags = tags.length;
 
-      async function addTag(no) {
+      const addTag = async (no) => {
         if (no > (noOfTags -1)) {
           return;
         }
@@ -214,7 +213,7 @@ export function load() {
           }
         };
 
-        await _this.loadAssembly(assembly, _this.tagListEl, _this.context);
+        await this.loadAssembly(assembly, this.tagListEl, this.context);
         addTag(no + 1);
       }
 
@@ -224,7 +223,7 @@ export function load() {
 
     removeTags() {
       let tags = [...this.tagListEl.getElementsByTagName('conduit-article-tag')];
-      tags.forEach(function(tag_component) {
+      tags.forEach((tag_component) => {
         tag_component.remove();
       });
     }
@@ -257,15 +256,14 @@ export function load() {
     }
 
     addComments(comments) {
-      let noOfComments = comments.length;
-      let _this = this;
+      const noOfComments = comments.length;
 
-      async function addComment(no) {
+      const addComment = async (no) => {
         if (no > (noOfComments -1)) {
           return;
         }
         let comment = comments[no];
-        await _this.addComment(comment);
+        await this.addComment(comment);
         addComment(no + 1);
       }
 
@@ -289,7 +287,7 @@ export function load() {
 
     removeComments() {
       let comments = [...this.commentsEl.getElementsByTagName('conduit-comment')];
-      comments.forEach(function(comment) {
+      comments.forEach((comment) => {
         comment.remove();
       });
     }
@@ -303,9 +301,7 @@ export function load() {
     }
 
     onSelected() {
-      //console.log('article page selected');
       this.loggedIn = this.root.isLoggedIn();
-      //console.log('logged in status: ' + this.loggedIn);
 
       this.setState({loggedIn: this.loggedIn});
       if (this.context.return_to === 'article') {
@@ -324,29 +320,28 @@ export function load() {
     }
 
     onLoaded() {
-      let _this = this;
       this.defaultImgSrc = this.context.defaultImage || '';
 
       // Follow/Unfollow button
 
-      let fn = async function() {
-        if (!_this.loggedIn) {
-          _this.context.return_to = 'article';
-          _this.root.switchToPage('login');
+      const fn = async () => {
+        if (!this.loggedIn) {
+          this.context.return_to = 'article';
+          this.root.switchToPage('login');
         }
         else {
-          if (_this.banner.followToggleEl.textContent === 'Follow') {
-            let results = await _this.root.apis.follow(_this.article.author);
+          if (this.banner.followToggleEl.textContent === 'Follow') {
+            let results = await this.root.apis.follow(this.article.author);
             if (!results.error) {
-              _this.setState({
+              this.setState({
                 following: results.profile.following
               });
             }
           }
           else {
-            let results = await _this.root.apis.unfollow(_this.article.author);
+            let results = await this.root.apis.unfollow(this.article.author);
             if (!results.error) {
-              _this.setState({
+              this.setState({
                 following: results.profile.following
               });
             }
@@ -357,26 +352,26 @@ export function load() {
 
       // Favourite/Unfavourite button
 
-      let fn2 = async function() {
-        let slug = _this.article.slug;
+      const fn2 = async () => {
+        let slug = this.article.slug;
 
-        if (!_this.loggedIn) {
-          _this.context.return_to = 'article';
-          _this.root.switchToPage('login');
+        if (!this.loggedIn) {
+          this.context.return_to = 'article';
+          this.root.switchToPage('login');
         }
         else {
-          if (_this.banner.favouriteToggleEl.textContent === 'Favorite Article') {
-            let results = await _this.root.apis.favourite(slug);
+          if (this.banner.favouriteToggleEl.textContent === 'Favorite Article') {
+            let results = await this.root.apis.favourite(slug);
             if (!results.error) {
-              _this.article = _this.normaliseArticle(results.article);
-              _this.setState(_this.article);
+              this.article = this.normaliseArticle(results.article);
+              this.setState(this.article);
             }
           }
           else {
-            let results = await _this.root.apis.unfavourite(slug);
+            let results = await this.root.apis.unfavourite(slug);
             if (!results.error) {
-              _this.article = _this.normaliseArticle(results.article);
-              _this.setState(_this.article);
+              this.article = this.normaliseArticle(results.article);
+              this.setState(this.article);
             }
           }
         }
@@ -386,60 +381,57 @@ export function load() {
 
       // Author link in banner - switch to display that author
 
-      let fn3 = function() {
-        //console.log('display author ' + _this.article.author);
-        _this.context.author = _this.article.author;
-        _this.root.switchToPage('profile');
+      const fn3 = () => {
+        this.context.author = this.article.author;
+        this.root.switchToPage('profile');
       }
       this.addHandler(fn3, this.banner.authorEl);
       this.addHandler(fn3, this.banner.authorImgLink);
 
       // Comment Button
 
-      let fn4 = async function(e) {
+      const fn4 = async (e) => {
         e.preventDefault();
-        let results = await _this.root.apis.addComment(_this.article.slug, _this.commentFormText.value);
+        let results = await this.root.apis.addComment(this.article.slug, this.commentFormText.value);
         if (!results.error) {
-          await _this.addComment(results.comment);
-          _this.commentFormText.value = '';
+          await this.addComment(results.comment);
+          this.commentFormText.value = '';
         }
       };
       this.addHandler(fn4, this.commentFormBtn);
 
       // Signin handler
 
-      let fn5 = function() {
-        _this.context.return_to = 'article';
-        _this.root.switchToPage('login');
+      const fn5 = () => {
+        this.context.return_to = 'article';
+        this.root.switchToPage('login');
       };
       this.addHandler(fn5, this.signInEl);
 
 
       // Signup handler
 
-      let fn6 = function() {
-        _this.context.return_to = 'article';
-        _this.root.switchToPage('signup');
+      const fn6 = () => {
+        this.context.return_to = 'article';
+        this.root.switchToPage('signup');
       };
       this.addHandler(fn6, this.signUpEl);
 
       // Edit article button in banner
 
-      let fn7 = function() {
-        //console.log('edit article');
-        _this.context.editing_article = _this.article;
-        _this.root.switchToPage('new_article');
+      const fn7 = () => {
+        this.context.editing_article = this.article;
+        this.root.switchToPage('new_article');
       };
       this.addHandler(fn7, this.banner.editArticleBtn);
 
       // Delete article button in banner
 
-      let fn8 = async function() {
-        //console.log('delete article');
-        let results = await _this.root.apis.deleteArticle(_this.article.slug);
+      const fn8 = async () => {
+        let results = await this.root.apis.deleteArticle(this.article.slug);
         if (!results.errors) {
-          _this.context.refresh_home_page = true;
-          _this.root.switchToPage('home_page');
+          this.context.refresh_home_page = true;
+          this.root.switchToPage('home_page');
         }
       };
       this.addHandler(fn8, this.banner.deleteArticleBtn);
@@ -487,7 +479,7 @@ export function load() {
     }
 
     disconnectedCallback() {
-      //console.log('*** article component was removed!');
+      //console.log('*** div component was removed!');
       if (this.onUnload) this.onUnload();
     }
   });

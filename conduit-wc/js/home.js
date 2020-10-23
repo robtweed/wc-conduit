@@ -24,13 +24,13 @@
  |  limitations under the License.                                                  |
  ------------------------------------------------------------------------------------
 
-  21 October 2020
+  23 October 2020
 
 */
 
 export function home_page_assembly() {
 
-  let component = {
+  const component = {
     componentName: 'conduit-content-page',
     state: {
       name: 'home_page'
@@ -44,7 +44,7 @@ export function home_page_assembly() {
   };
 
   
-  let hooks = {
+  const hooks = {
     'conduit-home-page': {
       initialise: async function() {
 
@@ -56,27 +56,6 @@ export function home_page_assembly() {
         this.setState({
           root: this.context.root
         });
-
-        async function hang(time) {
-          return new Promise((resolve) => {
-            setTimeout(function() {
-              resolve();
-            }, time);
-          });
-        }
-
-        async function jwt_decode_ready() {
-          if (typeof jwt_decode === 'undefined') {
-            //console.log('wait for 10');
-            await hang(10);
-            await jwt_decode_ready();
-          }
-          return;
-        }
-
-        //console.log('wait till jwt_decode is available');
-        await jwt_decode_ready();
-        //console.log('its ready!');
 
         // retrieve JWT if present
 
@@ -107,4 +86,3 @@ export function home_page_assembly() {
 
   return {component, hooks};
 };
-

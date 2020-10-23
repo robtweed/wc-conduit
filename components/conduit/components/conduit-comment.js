@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-comment';
+  const componentName = 'conduit-comment';
 
   customElements.define(componentName, class conduit_comment extends HTMLElement {
     constructor() {
@@ -73,13 +73,12 @@ export function load() {
         let author = state.author.username;
         this.authorImg.setAttribute('alt', author);
         this.authorLinks[1].textContent = author;
-        let _this = this;
 
         // hander for author image and name at bottom of each comment card
 
-        let fn = function() {
-          _this.context.author = author;
-          _this.root.switchToPage('profile');
+        const fn = () => {
+          this.context.author = author;
+          this.root.switchToPage('profile');
         };
         this.addHandler(fn, this.authorLinks[0]);
         this.addHandler(fn, this.authorLinks[1]);
@@ -89,10 +88,10 @@ export function load() {
         if (this.root.isLoggedIn() && this.context.user.username === author) {
           this.show(this.deleteIcon);
 
-          let fn2 = async function() {
-            let results = await _this.root.apis.deleteComment(state.id);
+          const fn2 = async () => {
+            let results = await this.root.apis.deleteComment(state.id);
             if (!results.error) {
-              _this.remove();
+              this.remove();
             }
           };
           this.addHandler(fn2, this.deleteIcon);

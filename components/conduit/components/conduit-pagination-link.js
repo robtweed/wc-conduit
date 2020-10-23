@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-pagination-link';
+  const componentName = 'conduit-pagination-link';
 
   customElements.define(componentName, class conduit_pagination_link extends HTMLElement {
     constructor() {
@@ -65,11 +65,10 @@ export function load() {
         }
         // add click handler to pagination link
 
-        let _this = this;
-        let fn = function() {
-          _this.active();
-          let offset = ((state.no - 1) * _this.limit);
-          _this.ownerPage.getAndDisplayArticles(offset, _this.classification);
+        const fn = () => {
+          this.active();
+          let offset = ((state.no - 1) * this.limit);
+          this.ownerPage.getAndDisplayArticles(offset, this.classification);
         }
         this.addHandler(fn, this.link);
       }

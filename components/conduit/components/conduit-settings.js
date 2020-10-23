@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-settings';
+  const componentName = 'conduit-settings';
 
   customElements.define(componentName, class conduit_settings extends HTMLElement {
     constructor() {
@@ -120,13 +120,11 @@ export function load() {
 
     onLoaded() {
 
-      let _this = this;
-
       // handler for form submit button
 
-      let fn1 = async function(e) {
+      const fn1 = async (e) => {
         e.preventDefault();
-        let form = _this.settingsForm;
+        let form = this.settingsForm;
         let params = {
           bio: form.bio.value,
           email: form.email.value,
@@ -136,46 +134,47 @@ export function load() {
         };
         
 
-        let results = await _this.root.apis.updateUser(params);
+        let results = await this.root.apis.updateUser(params);
         if (results.errors) {
+          // display the errors at the top of the form
           for (let type in results.errors) {
-            results.errors[type].forEach(function(text) {
+            results.errors[type].forEach((text) => {
               let error = type + ' ' + text;
-              _this.addError(error);
+              this.addError(error);
             });
           }
         }
         else {
           // update the jwt and user context
           let jwt = results.user.token;
-          _this.context.jwt = jwt;
+          this.context.jwt = jwt;
           localStorage.setItem('conduit-jwt', jwt);
-          _this.context.user = results.user;
-          _this.root.switchToPage('home_page');
+          this.context.user = results.user;
+          this.root.switchToPage('home_page');
         }
       };
       this.addHandler(fn1, this.submitBtn);
 
       // handler for logout button
 
-      let fn2 = function() {
-        delete _this.context.jwt;
+      const fn2 = () => {
+        delete this.context.jwt;
         localStorage.removeItem('conduit-jwt');
-        _this.root.showLoggedOutOptions();
-        _this.context.refresh_home_page = true;
+        this.root.showLoggedOutOptions();
+        this.context.refresh_home_page = true;
 
         // remove all pages except home_page
 
         let pages = ['new_article', 'article', 'profile', 'signup', 'login', 'settings'];
-        pages.forEach(function(page) {
-          let content_page = _this.root.getComponentByName('CONDUIT-CONTENT-PAGE', page);
+        pages.forEach((page) => {
+          let content_page = this.root.getComponentByName('CONDUIT-CONTENT-PAGE', page);
           if (content_page) {
             content_page.remove();
-            delete _this.root.contentPages[page];
+            delete this.root.contentPages[page];
           }
         });
 
-        _this.root.switchToPage('home_page');
+        this.root.switchToPage('home_page');
       };
       this.addHandler(fn2, this.logoutBtn);
 

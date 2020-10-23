@@ -24,13 +24,13 @@
  |  limitations under the License.                                                  |
  ------------------------------------------------------------------------------------
 
-  21 October 2020
+  23 October 2020
 
 */
 
 export function login_assembly() {
 
-  let component = {
+  const component = {
     componentName: 'conduit-content-page',
     state: {
       name: 'login'
@@ -43,7 +43,7 @@ export function login_assembly() {
     ]
   };
   
-  let hooks = {
+  const hooks = {
     'conduit-login': {
       initialise: function() {
         let context = this.context;
@@ -60,4 +60,3 @@ export function login_assembly() {
 
   return {component, hooks};
 };
-

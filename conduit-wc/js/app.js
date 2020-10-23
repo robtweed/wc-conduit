@@ -24,7 +24,7 @@
  |  limitations under the License.                                                  |
  ------------------------------------------------------------------------------------
 
-  21 October 2020
+  23 October 2020
 
 */
 
@@ -41,33 +41,35 @@ import {apis} from './apis-rest.js';
 
 let count = 0;
 
-document.onmouseover = function() {
-    //User's mouse is inside the page.
-    window.innerDocClick = true;
+
+document.onmouseover = () => {
+  //User's mouse is inside the page.
+  window.innerDocClick = true;
 }
 
-document.onmouseleave = function() {
-    //User's mouse has left the page.
-    window.innerDocClick = false;
+document.onmouseleave = () => {
+  //User's mouse has left the page.
+  window.innerDocClick = false;
 }
 
-
-window.addEventListener('beforeunload', function (e) {
+window.addEventListener('beforeunload', (e) => {
   // Alert the user to optionally cancel the reload event
   e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
   // Chrome requires returnValue to be set
   e.returnValue = 'xxxxx';
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+
+document.addEventListener('DOMContentLoaded', () => {
 
   let context = {
     paths: {
       conduit: './components/conduit/',
     },
+    readyEvent: new Event('ready'),
     host: userSettings.host || '',
     defaultImage: userSettings.defaultImage || '',
-    formatDate: function(date) {
+    formatDate: (date) => {
       let d = new Date(date);
       let month = ["January","February","March","April","May","June","July","August","September","October","November","December",];
       return month[d.getMonth()] + " " + d.getDate() +", " + d.getFullYear();
@@ -93,25 +95,31 @@ document.addEventListener('DOMContentLoaded', function() {
   webComponents.register('signup', webComponents.components.signup);
   webComponents.register('settings', webComponents.components.settings);
 
-  // set up the display
+  // make sure jwt_decode JS library has loaded, then start rendering:
 
-  let body = document.getElementsByTagName('body')[0];
+    let body = document.getElementsByTagName('body')[0];
 
-  webComponents.loadWebComponent('conduit-root', body, context, function(root) {
+  webComponents.loadWebComponent('conduit-root', body, context, (root) => {
 
-    window.addEventListener('popstate', function(event) {
+    context.root = root;
+    root.apis = apis(context).apis;
+
+    window.addEventListener('popstate', (event) => {
       if (!window.innerDocClick) {
-        //console.log('back button was clicked!');
+        console.log('back button was clicked!');
         root.homeLink.click();
       }
       window.history.pushState({}, '');
     });
 
-    let components = webComponents.components;
-    context.root = root;
-    root.apis = apis(context).apis;
-    root.switchToPage('home_page');
     window.history.pushState({}, '');
-  });
 
+    // when the root component fires the ready event,
+    // the home_page component can be safely loaded
+    // and switched to...
+
+    document.addEventListener('ready', () => {
+      root.switchToPage('home_page');
+    });
+  });
 });

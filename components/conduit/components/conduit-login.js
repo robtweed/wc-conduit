@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-login';
+  const componentName = 'conduit-login';
 
   customElements.define(componentName, class conduit_login extends HTMLElement {
     constructor() {
@@ -90,41 +90,37 @@ export function load() {
 
     onLoaded() {
 
-      let _this = this;
-      let fn = async function(e) {
+      const fn = async (e) => {
         e.preventDefault();
-        //console.log('login...');
-        _this.errorsEl.textContent = '';
-        let response = await _this.root.apis.authenticateUser(_this.email.value, _this.password.value);
-        //console.log(response);
+        this.errorsEl.textContent = '';
+        let response = await this.root.apis.authenticateUser(this.email.value, this.password.value);
         if (response.errors) {
           for (let type in response.errors) {
-            response.errors[type].forEach(function(text) {
+            response.errors[type].forEach((text) => {
               let error = type + ' ' + text;
-              _this.addError(error);
+              this.addError(error);
             });
           }
         }
         else {
-          if (response.user.image === '') response.user.image = _this.context.defaultImage || '';
-          _this.context.user = response.user;
+          if (response.user.image === '') response.user.image = this.context.defaultImage || '';
+          this.context.user = response.user;
           let jwt = response.user.token;
-          _this.context.jwt = jwt;
+          this.context.jwt = jwt;
           localStorage.setItem('conduit-jwt', jwt);
-          if (_this.context.return_to) {
-            _this.root.showLoggedInOptions();
-            _this.root.switchToPage(_this.context.return_to);
-            //delete _this.context.return_to;
+          if (this.context.return_to) {
+            this.root.showLoggedInOptions();
+            this.root.switchToPage(this.context.return_to);
           }
           else {
-            _this.root.switchToPage('home_page');
+            this.root.switchToPage('home_page');
           }
         }
       };
       this.addHandler(fn, this.form, 'submit');
 
-      let fn2 = function() {
-        _this.root.switchToPage('signup');
+      const fn2 = () => {
+        this.root.switchToPage('signup');
       };
       this.addHandler(fn2, this.needAccountLink);
 

@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-home-page';
+  const componentName = 'conduit-home-page';
 
   customElements.define(componentName, class conduit_home_page extends HTMLElement {
     constructor() {
@@ -153,7 +153,6 @@ export function load() {
     }
 
     async fetchByTagArticles(tag, offset) {
-      //console.log('fetchByTagArticles - tag  = ' + tag);
       offset = offset || 0;
       let limit = 10;
       let params = {tag: tag};
@@ -268,19 +267,18 @@ export function load() {
     }
 
     addTags(tagArr) {
-      let noOfTags = tagArr.length;
-      let _this = this;
+      const noOfTags = tagArr.length;
 
-      async function addNextTag(no) {
+      const addNextTag = async (no) => {
         if (no > noOfTags) return;
         let assembly = {
           componentName: 'conduit-tag',
           state: {
             text: tagArr[no - 1],
-            home_page: _this
+            home_page: this
           }
         };
-        await _this.loadAssembly(assembly, _this.tagListDiv, _this.context);
+        await this.loadAssembly(assembly, this.tagListDiv, this.context);
         addNextTag(no + 1);
       }
       addNextTag(1);
@@ -288,7 +286,7 @@ export function load() {
 
     removeTags() {
       let tags = [...this.tagListDiv.getElementsByTagName('conduit-tag')];
-      tags.forEach(function(tag_component) {
+      tags.forEach((tag_component) => {
         tag_component.remove();
       });
       this.tagsDisplayed = false;
@@ -339,14 +337,12 @@ export function load() {
       this.activeFeed = 'global';
       this.show(this.globalFeedLink);
       this.hide(this.byTagFeedLink);
-      let _this = this;
 
       // Global Feed header link
 
-      let fn = function() {
-        if (_this.activeFeed !== 'global') {
-          //console.log('global feed selected');
-          _this.showGlobalArticles();
+      const fn = () => {
+        if (this.activeFeed !== 'global') {
+          this.showGlobalArticles();
         }
         else {
           //console.log('ignored!');
@@ -356,10 +352,9 @@ export function load() {
 
       // #tag header link
 
-      let fn2 = function() {
-        if (_this.activeFeed !== 'byTag') {
-          //console.log('tag feed selected: ' + _this.feedTag);
-          _this.showByTagArticles(_this.feedTag);
+      const fn2 = () => {
+        if (this.activeFeed !== 'byTag') {
+          this.showByTagArticles(this.feedTag);
         }
         else {
           //console.log('ignored!');
@@ -369,10 +364,9 @@ export function load() {
 
       // Your Feed header link
 
-      let fn3 = function() {
-        if (_this.activeFeed !== 'your') {
-          //console.log('your feed selected');
-          _this.showYourArticles();
+      const fn3 = () => {
+        if (this.activeFeed !== 'your') {
+          this.showYourArticles();
         }
         else {
           //console.log('ignored!');

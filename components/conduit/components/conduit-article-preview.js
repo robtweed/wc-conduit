@@ -24,13 +24,13 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 21 October 2020
+ 23 October 2020
 
 */
 
 export function load() {
 
-  let componentName = 'conduit-article-preview';
+  const componentName = 'conduit-article-preview';
   let counter = -1;
   let id_prefix = componentName + '-';
 
@@ -86,38 +86,37 @@ export function load() {
         let slug = state.slug;
         this.name = slug;
         this.slug = slug;
-        let _this = this;
 
         // Click on the article content - switch to the article detail page
 
-        let fn1 = function() {
-          _this.context.slug = slug;
-          _this.root.switchToPage('article');
+        const fn1 = () => {
+          this.context.slug = slug;
+          this.root.switchToPage('article');
         };
         this.addHandler(fn1, this.articleLink);
 
 
         // Click on the favourite icon - only active if logged in
 
-        let fn2 = async function() {
-          if (!_this.root.isLoggedIn()) {
-            console.log('not logged in');
+        const fn2 = async () => {
+          if (!this.root.isLoggedIn()) {
+            //console.log('not logged in');
             return;
           }
 
-          if (!_this.favorited) {
-            let results = await _this.root.apis.favourite(slug);
+          if (!this.favorited) {
+            let results = await this.root.apis.favourite(slug);
             if (!results.error) {
-              _this.setState({
+              this.setState({
                 favorited: results.article.favorited,
                 favoritesCount: results.article.favoritesCount
               });
             }
           }
           else {
-            let results = await _this.root.apis.unfavourite(slug);
+            let results = await this.root.apis.unfavourite(slug);
             if (!results.error) {
-              _this.setState({
+              this.setState({
                 favorited: results.article.favorited,
                 favoritesCount: results.article.favoritesCount
               });
@@ -134,14 +133,12 @@ export function load() {
       }
       if (state.author) {
         this.authorEl.textContent = state.author;
-        let _this = this;
 
         // author link handler
 
-        let fn = function() {
-          //console.log('get author ' + state.author);
-          _this.context.author = state.author;
-          _this.context.root.switchToPage('profile');
+        const fn = () => {
+          this.context.author = state.author;
+          this.context.root.switchToPage('profile');
         };
         this.addHandler(fn, this.authorImgLink);
         this.addHandler(fn, this.authorEl);
@@ -164,18 +161,18 @@ export function load() {
     }
 
     addTags(tagArr) {
-      let noOfTags = tagArr.length;
+      const noOfTags = tagArr.length;
       let parentTag = this.tagListEl;
       let context = this.context;
       let loadAssembly = this.loadAssembly;
 
-      async function addTag(no) {
+      const addTag = async (no) => {
         if (no > (noOfTags -1)) {
           return;
         }
         let tagValue = tagArr[no];
 
-        let assembly = {
+        const assembly = {
           componentName: 'conduit-article-tag',
           state: {
             text: tagValue
