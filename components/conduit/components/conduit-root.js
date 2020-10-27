@@ -24,7 +24,7 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 23 October 2020
+ 27 October 2020
 
 */
 
@@ -158,6 +158,8 @@ export function load() {
       articles.forEach((article_component) => {
         article_component.remove();
       });
+      // if there were no articles, remove the "no articles here" div
+      parentDiv.textContent = '';
     }
 
     addPagination(articlesCount, parentDiv, classification, limit) {
