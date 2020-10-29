@@ -24,7 +24,7 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 23 October 2020
+ 29 October 2020
 
 */
 
@@ -261,8 +261,10 @@ export function load() {
     async getAndDisplayTags() {
       if (!this.tagsDisplayed) {
         let tagsArr = await this.fetchTags();
-        this.addTags(tagsArr);
-        this.tagsDisplayed = true;
+        if (Array.isArray(tagsArr)) {
+          this.addTags(tagsArr);
+          this.tagsDisplayed = true;
+        }
       }
     }
 
@@ -329,7 +331,6 @@ export function load() {
       }
 
       this.getAndDisplayTags();
-
     }
 
     onLoaded() {

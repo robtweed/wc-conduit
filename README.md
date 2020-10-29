@@ -18,6 +18,9 @@ Google Group for discussions, support, advice etc: [http://groups.google.co.uk/g
 It is compatible with any and all of the 
 [Conduit back-ends](https://github.com/gothinkster/realworld#backends).
 
+It also supports the optional, alternative WebSocket API interfaces provided by
+the [*qewd-conduit*](https://github.com/robtweed/qewd-conduit) back-end
+
 
 # Installing *wc-conduit*
 
@@ -43,9 +46,13 @@ following sub-folder structure:
            |     |
            |     |- index.html
            |     |
+           |     |- index-ws.html
+           |     |
            |     |- js
            |        |
            |        |- app.js
+           |        |
+           |        |- app-ws.js
            |        |
            |        |- userSettings.js
            |        |
@@ -103,9 +110,13 @@ contained) will now look like this:
            |     |
            |     |- index.html
            |     |
+           |     |- index-ws.html
+           |     |
            |     |- js
            |        |
            |        |- app.js
+           |        |
+           |        |- app-ws.js
            |        |
            |        |- userSettings.js
            |        |
@@ -149,9 +160,13 @@ which should now contain:
            |     |
            |     |- index.html
            |     |
+           |     |- index-ws.html
+           |     |
            |     |- js
            |        |
            |        |- app.js
+           |        |
+           |        |- app-ws.js
            |        |
            |        |- userSettings.js
            |        |
@@ -216,6 +231,44 @@ if required, listener port of your Web Server.
 
 You'll now see the normal, expected user interface for the
 RealWorld Conduit application.
+
+
+# Running *wc-conduit* using WebSocket APIs
+
+If you are using the [*qewd-conduit*](https://github.com/robtweed/qewd-conduit)
+back-end, you can try out its alternative WebSocket API interface.
+
+In a browser, enter the URL:
+
+        http://xx.xx.xx.xx/conduit-wc/index-ws.html
+
+Replace *xx.xx.xx.xx* with the IP address/domain name and,
+if required, listener port of your Web Server.
+
+You'll see the normal, expected user interface of a RealWorld
+Front-end, but now all the communication with the back-end is
+using WebSocket messages.  This interfacing makes use of
+the secure WebSocket messaging interface that is built into
+[QEWD](https://github.com/robtweed/qewd), 
+the Node.js framework used by *qewd-conduit*.
+
+The key differences between the two versions of the *wc-conduit*
+front end are as follows:
+
+- the REST version uses:
+  - */www/conduit-wc/index.html* as its web page.
+  - */www/conduit-wc/js/app.js* as its loader module.
+  - */www/conduit-wc/js/apis-rest.js* for all its REST communication with the back-end
+
+- the WebSocket version uses:
+  - */www/conduit-wc/index-ws.html* as its web page.
+  - */www/conduit-wc/js/app-ws.js* as its loader module.  You'll notice that
+this loads and starts the [*QEWD-Client*](https://github.com/robtweed/qewd-client)
+module, which establishes and maintains the WebSocket connection to the *qewd-conduit*
+back-end
+  - */www/conduit-wc/js/apis-websockets.js* for all its WebSocket communication with the back-end.
+You'll see that all the WebSocket messages emulate the structure and packaging of the payloads
+used by the equivalent REST APIs.
 
 
 # Some Information about the Architecture
