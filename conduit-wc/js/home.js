@@ -24,7 +24,7 @@
  |  limitations under the License.                                                  |
  ------------------------------------------------------------------------------------
 
-  23 October 2020
+  11 November 2020
 
 */
 
@@ -73,7 +73,15 @@ export function home_page_assembly() {
             this.context.jwt = jwt;
             //fetch user data and establish user context
             let results = await this.root.apis.getUser();
-            this.context.user = results.user;
+            // if JWT signature is invalid, secret must have changed
+            // so remove the JWT from storage
+            if (results.errors && results.errors.JWT) {
+              jwt = null;
+              localStorage.removeItem('conduit-jwt');
+            }
+            else {
+              this.context.user = results.user;
+            }
             this.onSelected();
           }
         }
