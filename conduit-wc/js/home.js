@@ -78,6 +78,7 @@ export function home_page_assembly() {
             if (results.errors && results.errors.JWT) {
               jwt = null;
               localStorage.removeItem('conduit-jwt');
+              delete this.context.jwt;
             }
             else {
               this.context.user = results.user;
