@@ -134,6 +134,9 @@ export function apis(context) {
           'Content-type': 'application/json',
         }
       };
+      if (context.jwt) {
+        options.headers.authorization = 'Token ' + context.jwt;
+      }
       let response = await fetch(fetch_url, options);
       let results = await response.json();
       return results.comments;
