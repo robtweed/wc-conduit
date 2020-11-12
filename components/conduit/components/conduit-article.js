@@ -24,7 +24,7 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 23 October 2020
+ 12 November 2020
 
 */
 
@@ -245,6 +245,7 @@ export function load() {
     async getAndDisplayArticle() {
       this.setState({loggedIn: this.loggedIn});
       this.article = await this.fetchArticle();
+      this.removeTags();
       this.setState(this.article);
     }
 
