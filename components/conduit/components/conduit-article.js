@@ -139,6 +139,7 @@ export function load() {
       if (state.loggedIn) {
         this.show(this.loggedInEl);
         this.hide(this.loggedOutEl);
+        if (this.context.user.image === '') this.context.user.image = this.context.defaultImage || '';
         this.commentFormImage.setAttribute('src', this.context.user.image);
       }
       if (state.loggedIn === false) {
