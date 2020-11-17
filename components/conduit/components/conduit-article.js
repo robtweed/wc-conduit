@@ -24,7 +24,7 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 12 November 2020
+ 17 November 2020
 
 */
 
@@ -201,6 +201,7 @@ export function load() {
 
     addTags(tags) {
       const noOfTags = tags.length;
+      if (noOfTags === 0) return;
 
       const addTag = async (no) => {
         if (no > (noOfTags -1)) {
@@ -259,6 +260,7 @@ export function load() {
 
     addComments(comments) {
       const noOfComments = comments.length;
+      if (noOfComments === 0) return;
 
       const addComment = async (no) => {
         if (no > (noOfComments -1)) {

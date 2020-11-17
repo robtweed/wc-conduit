@@ -24,7 +24,7 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 23 October 2020
+ 17 November 2020
 
 */
 
@@ -162,6 +162,7 @@ export function load() {
 
     addTags(tagArr) {
       const noOfTags = tagArr.length;
+      if (noOfTags === 0) return;
       let parentTag = this.tagListEl;
       let context = this.context;
       let loadAssembly = this.loadAssembly;

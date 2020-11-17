@@ -24,7 +24,7 @@
  |  limitations under the License.                                           |
  ----------------------------------------------------------------------------
 
- 23 October 2020
+ 17 November 2020
 
 */
 
@@ -104,17 +104,18 @@ export function load() {
 
     addTags(tags) {
       const noOfTags = tags.length;
+      if (noOfTags === 0) return;
 
-      const addTag = async (no) => {
+      const addATag = async (no) => {
         if (no > (noOfTags -1)) {
           return;
         }
         await this.addTag(tags[no]);
-        addTag(no + 1);
+        addATag(no + 1);
       }
 
       // kick it off
-      addTag(0);
+      addATag(0);
     }
 
     async addTag(tag) {
